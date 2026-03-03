@@ -380,6 +380,7 @@ def main():
 
         # 执行签到
         result = client.checkin()
+        checkin_count = 0  # 默认值，避免历史接口失败时未定义
 
         if result['success']:
             success_count += 1
@@ -428,14 +429,15 @@ def main():
             fail_count += 1
             print(f'  结果: ❌ {result["message"]}')
 
-        # 收集结果用于钉钉通知
-        account_result = {
-            'name': name,
-            'success': False,
-            'message': result['message'],
-            'session_expired': 'session' in result['message'].lower() or '认证' in result['message']
-        }
-        checkin_results.append(account_result)
+            # 收集结果用于钉钉通知
+            message = result.get('message', '')
+            account_result = {
+                'name': name,
+                'success': False,
+                'message': message,
+                'session_expired': 'session' in message.lower() or '认证' in message
+            }
+            checkin_results.append(account_result)
 
         print()
 

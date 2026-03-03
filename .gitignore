@@ -33,6 +33,7 @@ env/
 *~
 .spec-workflow
 .claude/
+.serena/
 
 # OS
 .DS_Store
