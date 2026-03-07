@@ -13,9 +13,9 @@ import requests
 from datetime import datetime
 from typing import Optional
 
-# 钉钉通知
+# PushPlus 通知
 try:
-    from dingtalk_notifier import send_checkin_notification
+    from pushplus_notifier import send_checkin_notification
 except ImportError:
     send_checkin_notification = None
 
@@ -416,7 +416,7 @@ def main():
                     total_str = str(total_quota)
                 print(f'  统计: 本月已签 {checkin_count} 天，累计 {total_str} 额度')
 
-            # 收集结果用于钉钉通知
+            # 收集结果用于推送通知
             account_result = {
                 'name': name,
                 'success': True,
@@ -429,7 +429,7 @@ def main():
             fail_count += 1
             print(f'  结果: ❌ {result["message"]}')
 
-            # 收集结果用于钉钉通知
+            # 收集结果用于推送通知
             message = result.get('message', '')
             account_result = {
                 'name': name,
@@ -446,12 +446,12 @@ def main():
     print(f'签到完成: 成功 {success_count}, 失败 {fail_count}')
     print('=' * 50)
     
-    # 发送钉钉通知
+    # 发送 PushPlus 通知
     if send_checkin_notification:
-        print('正在发送钉钉通知...')
+        print('正在发送 PushPlus 通知...')
         send_checkin_notification(checkin_results, execution_time)
-    elif os.environ.get('DINGTALK_WEBHOOK'):
-        print('[警告] 已配置 DINGTALK_WEBHOOK 但无法导入通知模块')
+    elif os.environ.get('PUSHPLUS_TOKEN'):
+        print('[警告] 已配置 PUSHPLUS_TOKEN 但无法导入通知模块')
 
     # 如果全部失败则返回错误码
     if fail_count == len(accounts):
@@ -461,5 +461,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-# === DINGTALK NOTIFICATION PATCH ===
-# This section was added to send DingTalk notifications
