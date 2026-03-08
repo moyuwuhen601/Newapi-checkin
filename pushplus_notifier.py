@@ -166,7 +166,7 @@ def build_checkin_report(results: List[Dict[str, Any]], execution_time: str) -> 
 def send_checkin_notification(results: List[Dict[str, Any]], execution_time: Optional[str] = None) -> bool:
     """
     发送签到通知到 PushPlus
-
+    
     从环境变量读取配置:
         PUSHPLUS_TOKEN: 用户令牌（必填）
         PUSHPLUS_TOPIC: 群组编码（选填）

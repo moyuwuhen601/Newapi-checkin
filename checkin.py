@@ -330,7 +330,7 @@ def main():
     execution_time = datetime.now(beijing_tz).strftime("%Y-%m-%d %H:%M:%S")
     print('=' * 50)
     print('NewAPI 自动签到')
-    print(f'执行时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+    print(f'执行时间: {execution_time}')
     print('=' * 50)
 
     # 从环境变量获取账号配置
@@ -449,9 +449,14 @@ def main():
     # 发送 PushPlus 通知
     if send_checkin_notification:
         print('正在发送 PushPlus 通知...')
-        send_checkin_notification(checkin_results, execution_time)
+        if send_checkin_notification(checkin_results, execution_time):
+            print('✅ 通知发送成功')
+        else:
+            print('❌ 通知发送失败')
     elif os.environ.get('PUSHPLUS_TOKEN'):
         print('[警告] 已配置 PUSHPLUS_TOKEN 但无法导入通知模块')
+    else:
+        print('[提示] 未配置 PUSHPLUS_TOKEN，跳过通知')
 
     # 如果全部失败则返回错误码
     if fail_count == len(accounts):
